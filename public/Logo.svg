@@ -1,0 +1,17 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 682.4249150722048 690.2211797480213" width="2047.2747452166145" height="2070.663539244064">
+  <!-- svg-source:excalidraw -->
+  
+  <defs>
+    <style class="style-fonts">
+      @font-face {
+        font-family: "Virgil";
+        src: url("https://excalidraw.com/Virgil.woff2");
+      }
+      @font-face {
+        font-family: "Cascadia";
+        src: url("https://excalidraw.com/Cascadia.woff2");
+      }
+    </style>
+    
+  </defs>
+  <g stroke-opacity="0.7" fill-opacity="0.7" stroke-linecap="round" transform="translate(10 13.898132337908464) rotate(0 331.2124575361024 331.21245753610265)"><path d="M32 0 C261.02 -0.03, 492.77 1.66, 630.42 0 C649.24 4.35, 665.16 10.9, 662.42 32 C667.65 233.69, 665.33 439.2, 662.42 630.42 C659.42 649.22, 650.91 666.13, 630.42 662.42 C395.32 667.14, 154.84 664.71, 32 662.42 C8.15 664.59, 5.09 653.83, 0 630.42 C-0.17 476.11, -1.42 323.68, 0 32 C-3.31 8.84, 6.5 -3.04, 32 0" stroke="none" stroke-width="0" fill="#a5d8ff"></path><path d="M32 0 C238.47 -1.72, 447.44 -1.52, 630.42 0 M32 0 C260.43 -2.14, 487.51 -3.02, 630.42 0 M630.42 0 C649.28 -0.34, 665.24 13.61, 662.42 32 M630.42 0 C651.8 2.1, 662.29 11.99, 662.42 32 M662.42 32 C665.35 257.75, 667.08 483.02, 662.42 630.42 M662.42 32 C664.66 205.22, 664.1 380.03, 662.42 630.42 M662.42 630.42 C661.02 653.59, 649.21 661.18, 630.42 662.42 M662.42 630.42 C665.35 651.65, 649.17 666.3, 630.42 662.42 M630.42 662.42 C463.65 663.8, 297.49 664.43, 32 662.42 M630.42 662.42 C482.91 660.49, 333.94 661.72, 32 662.42 M32 662.42 C10.59 660.48, 1.36 655.58, 0 630.42 M32 662.42 C12.08 664, -0.05 652.51, 0 630.42 M0 630.42 C4.4 507.39, 2.99 381.86, 0 32 M0 630.42 C2.15 482.25, 2.05 334.33, 0 32 M0 32 C1.7 7.95, 11.86 -0.41, 32 0 M0 32 C2.69 11.83, 7.77 -2.29, 32 0" stroke="#1971c2" stroke-width="4" fill="none"></path></g><g stroke-opacity="0.8" fill-opacity="0.8" transform="translate(34.813238896829716 10.00000000000091) rotate(0 163.6259765625 335.1105898740102)"><text x="0" y="0" font-family="Cascadia, Segoe UI Emoji" font-size="558.5176497900169px" fill="#f08c00" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="text-before-edge">P</text></g><g stroke-opacity="0.8" fill-opacity="0.8" transform="translate(320.35972305037467 10) rotate(0 163.6259765625 335.1105898740102)"><text x="0" y="0" font-family="Cascadia, Segoe UI Emoji" font-size="558.5176497900169px" fill="#e03131" text-anchor="start" style="white-space: pre;" direction="ltr" dominant-baseline="text-before-edge">L</text></g></svg>
