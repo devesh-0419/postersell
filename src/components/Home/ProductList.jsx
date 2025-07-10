@@ -50,12 +50,12 @@ const  ProductList = (props)=> {
           <h1 className=''>Price</h1>
           <div>
           <input type="radio" name="price" id="highTOLow"/>
-          <label  for="highTOLow">High To Low</label>
+          <label  htmlFor="highTOLow">High To Low</label>
             
           </div>
           <div>
           <input type="radio" name="price" id="lowToHigh" />
-          <label for="lowToHigh">Low To High</label>
+          <label htmlFor="lowToHigh">Low To High</label>
           </div>
         </div>
       </div>

@@ -12,12 +12,10 @@ import {
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
-import { getAuth, signOut } from "firebase/auth";
-import { app } from "../../firebase";
 import { clearUser, selectUser } from "../../app/userSlice";
 
 const NavBar = () => {
-  const auth = getAuth(app);
+ 
   const user = useSelector(selectUser);
   const [search, setSearch] = useState("");
   const [debounced, setDebounced] = useState("");
@@ -100,12 +98,11 @@ const NavBar = () => {
 
   }
 
-  const logOutHandler = () => {
+  const logOutHandler = async() => {
     console.log("user", user);
     dispatch(clearUser());
-    console.log("user", user);
-    signOut(auth);
-    console.log("user", user);
+    await axios.post('http://localhost:4000/logout', {}, { withCredentials: true });
+
   };
 
   const toggleNav = () => {

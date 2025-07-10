@@ -14,8 +14,8 @@ const ExtraFooter = () => {
     <>
     
     <div className='bg-primary my-[0.04rem] text-primary_text text-lg flex flex-col md:flex-row md:justify-around'>
-        {content.map(item=>{
-            return <Link to={item.link} className=''>
+        {content.map((item,i)=>{
+            return <Link key={i} to={item.link} className=''>
                 <div className='m-4'>
              {item.name}
 

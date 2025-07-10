@@ -1,13 +1,13 @@
 import React from 'react';
 import  ProductList  from './ProductList';
 import  NavBar  from '../navBar/NavBar';
-import Footer from '../Footer/Footer';
+import Footer from '../footer/Footer';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../app/userSlice';
 
 const Home=()=> {
-  const user = useSelector(selectUser);
- console.log('user inside home', user)
+//   const user = useSelector(selectUser);
+//  console.log('user inside home', user)
   return (
     <>
       <NavBar  />

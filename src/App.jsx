@@ -12,22 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearUser, selectUser, setUser } from './app/userSlice';
 
 const App = () =>{
-
-  const auth=getAuth(app);
-const dispatch = useDispatch();
-useEffect(()=>{
-  onAuthStateChanged(auth,(user)=>{
-    if(user){
-      dispatch(setUser(user));
-      console.log('user inside app', user)
-      }
-      else{
-        console.log("Signed Out");
-      }
-    })
-  })
-
-const user = useSelector(selectUser);
+  const user = useSelector(selectUser);
   return (
     <BrowserRouter>
     

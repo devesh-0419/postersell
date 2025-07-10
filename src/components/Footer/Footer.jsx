@@ -30,13 +30,13 @@ const footerElemet = [
     <>
     <div className='text-primary_text bg-primary'>
 <div className='flex flex-col md:flex-row gap-2 md:justify-around'>
-{footerElemet.map(ele=>{
-  return <div className='m-4'>
+{footerElemet.map((ele,i)=>{
+  return <div key={i} className='m-4'>
    <div className=''>
            <h1 className='font-extrabold opacity-50'>{ele.Name}</h1>
 
-           {ele.content.map(val=>{
-            return <Link to={val.link}>
+           {ele.content.map((val,i)=>{
+            return <Link to={val.link} key={i}>
             <div className='font-medium text-xs hover:underline'>
               {val.Name}
             </div>

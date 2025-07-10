@@ -3,85 +3,70 @@ import NavBar from "./AuthNav";
 import { Link } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import {app} from '../../firebase'
+import { app } from '../../firebase'
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "../../app/userSlice";
+import axios from "axios";
 
-const Register = ({name}) => {
-  const dispatch  = useDispatch();
+const Register = ({ name }) => {
+
   const [visPass, setVisPass] = useState(false);
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
-  const [authError,setAuthError] = useState("");
-  
-  
-  const auth = getAuth(app);
-  const googleProvider = new GoogleAuthProvider();
-  
-  const signInWithGoogle = ()=>{
-    signInWithPopup(auth,googleProvider)
-    .then(val=>{
-      console.log('val', val);
-    })
-    .catch(err=>{
-      console.log('err', err);
-    })
-    
-    
-  }
-  
-  const createUser = ()=>{
-    console.log('Entered into create User')
-    
-    createUserWithEmailAndPassword(auth,email,password)
-    .then(val=>{
-      console.log('val', val);
-    }
-    )
-    .catch(e=>{
-      console.log('error', e)
-    })
-    .finally(()=>{
-      
-      setEmail("");
-      setPassword("");
-    })
-    
-    
-  }
-  const loginUser = ()=>{
-    console.log('Enter into login');
-    signInWithEmailAndPassword(auth,email,password)
-    .then(val=>{
-      console.log('val', val);
-    })
-    .catch(e=>{
-      console.error('Error code',e.code);
-      console.error('Error message',e.message);
-      let err = e.code;
-      err=err.substring(5);
-      err.toUpperCase();
-      setAuthError(err)
-      // String.stringify(err);
-      
-      
-    })
-    .finally(()=>{
-      
-      setEmail("");
-      setPassword("");
-    })
-  }
-  
-  
+  const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState("");
   
   const toggleVisPass = () => {
     setVisPass(!visPass);
   };
+
+  const dispatch = useDispatch();
+ 
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:4000/register', {
+        displayName,
+        email,
+        password,
+        username:email
+      });
+
+      // Assuming backend returns user data like: { id, email, token }
+      const userData = response.data;
+
+      dispatch(setUser(userData));
+      setStatus('User created and logged in!');
+    } catch (error) {
+      console.error('Error creating user:', error);
+      setStatus(
+        error.response?.data?.message || 'Failed to create user. Try again.'
+      );
+    }
+  };
+
+
   
-  const user = useSelector(selectUser);
-console.log('user inside auth', user)
-  
+  const handleLoginUser = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:4000/login', {
+        identifier:email,
+        password,
+      });
+
+      // Assuming the response contains user data and token
+      const userData = response.data;
+
+      dispatch(setUser(userData));
+      console.log('userData', userData);
+    } catch (error) {
+      console.error('Login error:', error);
+
+    }
+  };
   return (
     <>
       <NavBar />
@@ -97,18 +82,20 @@ console.log('user inside auth', user)
 
         <div className="mx-10 sm:mx-20 sm:w-[70%] md:mx-44 md:w-[50%]">
           <form action="">
-            {/* {name === "Register" ? (
+            {name === "Register" ? (
               <label className=" font-semibold text-xl" htmlFor="">
                 Name
                 <input
                   className="w-full my-1 p-1 focus:outline-none block bg-[#f0f0f0]"
                   type="text"
                   placeholder="Enter Your Name"
+                  value={displayName}
+                  onChange={e => { setDisplayName(e.target.value) }}
                 />
               </label>
             ) : (
               <></>
-            )} */}
+            )}
             <label className=" font-semibold text-xl" htmlFor="email">
               Email
               <input
@@ -117,7 +104,7 @@ console.log('user inside auth', user)
                 type="text"
                 placeholder="Enter Your Email"
                 value={email}
-                onChange={e=>{setEmail(e.target.value)}}/>
+                onChange={e => { setEmail(e.target.value) }} />
             </label>
             <label className=" font-semibold text-xl" htmlFor="password" >
               Password
@@ -127,7 +114,7 @@ console.log('user inside auth', user)
                 type={visPass ? "text" : "password"}
                 placeholder="Enter Pas***rd"
                 value={password}
-                onChange={e=>{setPassword(e.target.value)}}/>
+                onChange={e => { setPassword(e.target.value) }} />
               <div className="ml-[92%] -mt-8 mb-5" onClick={toggleVisPass}>
                 {visPass ? (
                   <EyeIcon className="w-5" />
@@ -140,38 +127,38 @@ console.log('user inside auth', user)
             <button
               className="my-4 bg-primary text-primary_text p-2 px-3 rounded-sm text-md font-semibold hover:scale-105"
               type="button"
-              onClick={name==='Register'?createUser:loginUser}
+              onClick={name === 'Register' ? handleCreateUser  : handleLoginUser}
             >
               {name}
             </button>
-            </form>
-        {<div  className="block text-sm text-red-700 hover:underline">
-          {authError}
-        </div>}
-            {name === "Register" ? (
-              <Link
-                to="/login"
-                className="block text-xs text-primary hover:underline"
-                href="/login"
-              >
-                Already have an account login?
-              </Link>
-            ) : (
-              <Link
-                to="/register"
-                className="block text-xs text-primary hover:underline"
-                href="/login"
-              >
-                Have you Register?
-              </Link>
-            )}
+          </form>
+          {<div className="block text-sm text-red-700 hover:underline">
+            {authError}
+          </div>}
+          {name === "Register" ? (
+            <Link
+              to="/login"
+              className="block text-xs text-primary hover:underline"
+              href="/login"
+            >
+              Already have an account login?
+            </Link>
+          ) : (
+            <Link
+              to="/register"
+              className="block text-xs text-primary hover:underline"
+              href="/login"
+            >
+              Have you Register?
+            </Link>
+          )}
 
-            <div className="font-bold text-xl my-4 border-2 border-black inline-block p-2 hover:scale-95 ">
-        <button type="button" onClick={signInWithGoogle}>
-          SignIn With Google
-        </button>
+          {/* <div className="font-bold text-xl my-4 border-2 border-black inline-block p-2 hover:scale-95 ">
+            <button type="button" onClick={signInWithGoogle}>
+              SignIn With Google
+            </button>
 
-            </div>
+          </div> */}
         </div>
       </div>
     </>
