@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import { HeartIcon } from '@heroicons/react/24/solid';
 import {useDispatch,useSelector} from 'react-redux'
 import {increment,decrement,setVal} from '../../app/cartSlice'
+import {addFavourite,removeFavourite, selectUser} from '../../app/userSlice'
 const Product= (props) => {
 
   const dispatch = useDispatch();
-
+  const user = useSelector(selectUser);
+  const favoritePosters= useSelector((state)=>state.user.favoritePosters)
   
   
   const onAddToCart = ()=>{
@@ -18,11 +20,23 @@ const Product= (props) => {
     
   }
 
+  
   const [fav, setFav] = useState(false);
   const { imageUrl, price, title, _id } = props.poster;
 
+
+ useEffect(()=>{
+  if(user){
+    if(fav==true)dispatch(addFavourite({id:_id}));
+    else dispatch(removeFavourite({id:_id}));
+   
+  }
+ },[fav])
+  
+
   const toggleFav = () => {
     setFav(!fav);
+    console.log('favoritePosters', favoritePosters);  
   };
 
   return (

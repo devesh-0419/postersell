@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import NavBar from "./AuthNav";
 import { Link } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { app } from '../../firebase'
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "../../app/userSlice";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Register = ({ name }) => {
@@ -14,8 +13,8 @@ const Register = ({ name }) => {
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
-  const [authError, setAuthError] = useState("");
-  
+  const [authStatus, setAuthStatus] = useState("");
+  const navigate = useNavigate();
   const toggleVisPass = () => {
     setVisPass(!visPass);
   };
@@ -31,16 +30,14 @@ const Register = ({ name }) => {
         email,
         password,
         username:email
-      });
+      },{withCredentials:true});
 
-      // Assuming backend returns user data like: { id, email, token }
-      const userData = response.data;
-
-      dispatch(setUser(userData));
-      setStatus('User created and logged in!');
+      
+      navigate('/');
+      // setAuthStatus('User created and logged in!');
     } catch (error) {
       console.error('Error creating user:', error);
-      setStatus(
+      setAuthStatus(
         error.response?.data?.message || 'Failed to create user. Try again.'
       );
     }
@@ -50,21 +47,21 @@ const Register = ({ name }) => {
   
   const handleLoginUser = async (e) => {
     e.preventDefault();
-
+console.log('e', e)
     try {
-      const response = await axios.post('http://localhost:4000/login', {
+      const response = await axios.post('http://localhost:4000/login/', {
         identifier:email,
         password,
-      });
+      },{withCredentials:true});
 
-      // Assuming the response contains user data and token
-      const userData = response.data;
+      console.log('response', response);
+       navigate('/');
+      // setAuthStatus('User logged in!');
 
-      dispatch(setUser(userData));
-      console.log('userData', userData);
+
     } catch (error) {
-      console.error('Login error:', error);
-
+      console.error('Login error:', error.response?.data?.message);
+      setAuthStatus( error.response?.data?.message || 'Failed to LogIn. Try again.');
     }
   };
   return (
@@ -133,7 +130,7 @@ const Register = ({ name }) => {
             </button>
           </form>
           {<div className="block text-sm text-red-700 hover:underline">
-            {authError}
+            {authStatus}
           </div>}
           {name === "Register" ? (
             <Link

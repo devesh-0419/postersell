@@ -9,13 +9,14 @@ import {onAuthStateChanged,getAuth} from 'firebase/auth'
 import Profile from './components/Profile/Profile';
 import CheckOut from './components/CheckOut/CheckOut';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearUser, selectUser, setUser } from './app/userSlice';
+import { clearUser, selectUser, setFavorite, setUser } from './app/userSlice';
+import axios from 'axios';
 
 const App = () =>{
   const user = useSelector(selectUser);
+ 
   return (
     <BrowserRouter>
-    
       <Routes>
         <Route path="/product/:id" element={<Product  />} />
         <Route path="/register" element={user?<Navigate to="/"/>:<Auth name={"Register"} />} />
