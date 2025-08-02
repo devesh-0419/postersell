@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "../../app/userSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 
 const Register = ({ name }) => {
-
   const [visPass, setVisPass] = useState(false);
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -25,14 +25,14 @@ const Register = ({ name }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:4000/register', {
+      const response = await axios.post(`${backendUrl}/register`, {
         displayName,
         email,
         password,
         username:email
       },{withCredentials:true});
 
-      
+      console.log('response', response);
       navigate('/');
       // setAuthStatus('User created and logged in!');
     } catch (error) {
@@ -40,6 +40,12 @@ const Register = ({ name }) => {
       setAuthStatus(
         error.response?.data?.message || 'Failed to create user. Try again.'
       );
+    }
+    finally{
+      setDisplayName("");
+      setEmail("");
+      setPassword("");
+      
     }
   };
 
@@ -49,7 +55,7 @@ const Register = ({ name }) => {
     e.preventDefault();
 console.log('e', e)
     try {
-      const response = await axios.post('http://localhost:4000/login/', {
+      const response = await axios.post(`${backendUrl}/login`, {
         identifier:email,
         password,
       },{withCredentials:true});
@@ -62,6 +68,11 @@ console.log('e', e)
     } catch (error) {
       console.error('Login error:', error.response?.data?.message);
       setAuthStatus( error.response?.data?.message || 'Failed to LogIn. Try again.');
+    }
+    finally{
+       setEmail("");
+      setPassword("");
+      
     }
   };
   return (

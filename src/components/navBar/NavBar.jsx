@@ -10,14 +10,15 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/solid";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { clearUser, selectUser } from "../../app/userSlice";
-
+const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 const NavBar = () => {
- 
+ const navigate = useNavigate();
   const user = useSelector(selectUser);
   const [search, setSearch] = useState("");
+  const [activeIndex,setActiveIndex]=useState(-1);
   const [debounced, setDebounced] = useState("");
   const [result, setResult] = useState([
     "Movies",
@@ -40,7 +41,7 @@ const NavBar = () => {
     // }
 
     axios
-      .get(`http://localhost:4000/posters/search?val=${debounced}`)
+      .get(`${backendUrl}/posters/search?val=${debounced}`)
       .then((response) => {
         setResult(response.data);
         console.log("Result: ", response.data);
@@ -61,8 +62,14 @@ const NavBar = () => {
   const navLi = [
     { name: "Register", link: "/register" },
     { name: "Login", link: "/login" },
-    { name: "Become a Seller", link: "/becomeaseller" },
+    { name: "Buy in Bulk", link: "/buyinbulk" },
     { name: "Contact", link: "/contact" },
+  ];
+  const navLiUser = [
+    { name: "Profile", link: "/profile" },
+    { name: "Buy in Bulk", link: "/buyinbulk" },
+    { name: "Contact", link: "/contact" },
+    { name: "LogOut", link: "/logOut" },
   ];
 
   const account =
@@ -76,18 +83,53 @@ const NavBar = () => {
           { name: "LogOut", link: "" },
         ];
 
-  const dispatch = useDispatch();
-  const handleEnter = (e) => {
-    if ((e.key = "Enter")) {
-      const setPosters = (products) => {
-        dispatch(initialize(products));
-      };
+        const dispatch = useDispatch();
+const handleClearSearch = e =>{
+e.preventDefault();
+setSearch("");
+}
 
-      setPosters(result);
+const handleChange = (e)=>{
+      console.log('entered on change')
+          setSearch(e.target.value)
+        }
+
+
+  const handleEnter = (e) => {
+  console.log('e.key', e.key)
+
+    if (e.key == "Enter" && (activeIndex!=-1||search.length>0)) {
+      navigate('/');
+       const tempRes = [...result]; 
+       console.log('result', result)
+       setSearch((tempRes[activeIndex].title)||search);
+       const setPosters = (products) => {
+         dispatch(initialize(products));
+       };
+
+
+   setPosters(result);
+
+
     }
+    console.log('activeIndex', activeIndex)
+    if (e.key == "ArrowDown" && activeIndex<result.length-1) {
+      setActiveIndex(prev=>prev+1);
+      
+      
+      
+    }
+    if (e.key == "ArrowUp" && activeIndex > 0) {
+      setActiveIndex(prev=>prev-1);
+      
+      
+    }
+
   };
 
+
   const handleClickSearchOption = (e,item) =>{
+  
     e.preventDefault();
     setSearch(item.title);
     const setPosters = (products) => {
@@ -97,6 +139,8 @@ const NavBar = () => {
       setPosters(result);
 
   }
+
+
 
   const logOutHandler = async() => {
     console.log("user", user);
@@ -116,7 +160,7 @@ const NavBar = () => {
         <nav className="flex flex-col justify-between sm:flex-row h-32 sm:h-20">
           <div className="flex justify-between">
             <Link to="/" className="h-8">
-              <img src="Logo1.png" className="h-8 m-4 sm:my-5" alt="" />
+              <img src="/Logo1.png" className="h-8 m-4 sm:my-5" alt="" />
             </Link>
             <div className="cursor-pointer sm:hidden" onClick={toggleNav}>
               <Bars3Icon className="w-8 h-8 text-primary_text m-4 hover:scale-110" />
@@ -132,20 +176,33 @@ const NavBar = () => {
                     onClick={toggleNav}
                   />
                 </div>
-                <div className="flex flex-col absolute right-0 w-full border-y-2 my-10">
-                  {navLi.map((li, i) => {
-                    return (
-                      <Link
-                        to={li.link}
-                        key={i}
-                        href="#"
-                        className="my-2 text-end hover:bg-primary_light font-semibold text-lg"
-                      >
-                        <h1 className="mx-3 hover:scale-105">{li.name}</h1>
-                      </Link>
-                    );
-                  })}
-                </div>
+              {!user?<div className="flex flex-col absolute right-0 w-full border-y-2 my-10">
+                {navLi.map((li, i) => {
+                  return (
+                    <Link
+                      to={li.link}
+                      key={i}
+                      href="#"
+                      className={`my-2 text-end hover:bg-primary_light font-semibold text-lg`}
+                    >
+                      <h1 className="mx-3 hover:scale-105">{li.name}</h1>
+                    </Link>
+                  );
+                })}
+              </div>:<div className="flex flex-col absolute right-0 w-full border-y-2 my-10">
+                {navLiUser.map((li, i) => {
+                  return (
+                    <Link
+                      to={li.link}
+                      key={i}
+                      href="#"
+                      className={`my-2 text-end hover:bg-primary_light font-semibold text-lg`}
+                    >
+                      <h1 className="mx-3 hover:scale-105">{li.name}</h1>
+                    </Link>
+                  );
+                })}
+              </div>}
               </div>
             </div>
           )}
@@ -156,12 +213,15 @@ const NavBar = () => {
                 type="text"
                 placeholder="Search"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={handleEnter}
                 className="w-[25rem]  text-black bg-transparent border-none shadow-none focus:outline-none text-base sm:w-72 md:w-96 lg:w-[30rem]"
               />
+             {(search.length>0) && <div onClick={handleClearSearch} className="text-gray-700 p-3 italic font-bold opacity-60 cursor-pointer">
+                clear
+              </div>}
             </div>
-            <div className="hidden group-hover:block  relative  left-10 top-0.5 z-20">
+            <div className={`hidden group-focus-within:block  relative  left-10 top-0.5 z-20 }`}>
               <div className="flex flex-col bg-[#f2f1d3] rounded-md w-[25rem] sm:w-72 md:w-96 lg:w-[30rem]">
                 {result.map((item, i) => {
                   return (
@@ -169,7 +229,9 @@ const NavBar = () => {
                       key={i}
                       href="#"
                       onClick={e=> handleClickSearchOption(e,item)}
-                      className="px-2 py-1 text-primary  hover:bg-[#b6b6b6]  rounded-md"
+                  
+                     
+                      className={`${activeIndex==i?'bg-[#b6b6b6]/60':''} px-2 py-1 text-primary hover:bg-[#b6b6b6]  rounded-md `}
                     >
                       {item.title}
                     </a>
@@ -216,7 +278,7 @@ const NavBar = () => {
                 <UserCircleIcon className="w-8 h-8 md:w-7" />
                 <div className="hidden md:block my-1 mx-1 text-sm">Account</div>
               </div>
-              <div className="hidden group-hover:block  relative bottom-3 right-2 z-20">
+              <div className="hidden group-hover:block relative bottom-3 right-2 z-20">
                 <div className="flex flex-col text-end   bg-[#266867] rounded-md">
                   {account.map((item, i) => {
                     return (

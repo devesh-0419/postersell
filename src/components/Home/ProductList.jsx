@@ -5,8 +5,15 @@ import axios from 'axios';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { useSelector,useDispatch } from 'react-redux';
 import {initialize} from '../../app/productSlice'
-
+import { selectUser } from '../../app/userSlice';
+import { useParams, useSearchParams } from 'react-router-dom';
+const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 const  ProductList = (props)=> {
+  const user = useSelector(selectUser);
+  const favoritePosters = user ? new Set(user.favoritePosters) : new Set();
+  
+  console.log('backendUrl', import.meta.env);
+  // console.log('favoritePosters', favoritePosters)
   const dispatch = useDispatch();
   const posters = useSelector((state)=>state.product.products);
   const setPosters = (products)=>{
@@ -15,19 +22,24 @@ const  ProductList = (props)=> {
   }
   const [currentPage, setCurrentPage] = useState(1);
   const [pagenumber, setPageNumber] = useState([1, 2]);
+ 
+
+const {sortby} = useParams();
+console.log('sortBy', sortby);
+const url = sortby ? `${backendUrl}/posters/?sortby=${sortby}` : `${backendUrl}/posters/`;
 
   useEffect(() => {
     // console.log("refresh..........");
     
     axios
-      .get("http://localhost:4000/posters")
+      .get(url)
       .then((response) => {
         setPosters(response.data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
-  }, []);
+  }, [sortby]);
 
   const pageData = (address, page) => {
     axios
@@ -44,24 +56,10 @@ const  ProductList = (props)=> {
 
   return (
     <div className="bg-primary_text">
-      <div className='absolute m-2 bg-slate-50 p-2 border-slate-300 border-2'>
-        <h1 className='font-semibold'>Filter</h1>
-        <div className=''>
-          <h1 className=''>Price</h1>
-          <div>
-          <input type="radio" name="price" id="highTOLow"/>
-          <label  htmlFor="highTOLow">High To Low</label>
-            
-          </div>
-          <div>
-          <input type="radio" name="price" id="lowToHigh" />
-          <label htmlFor="lowToHigh">Low To High</label>
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col sm:mx-44 sm:flex-row sm:flex-wrap">
+    
+      <div className="flex flex-col sm:mx-20 sm:flex-row sm:flex-wrap">
         {posters.map((poster, i) => (
-          <Product poster={poster} key={i} />
+          <Product poster={poster} key={i} user={user} fav={favoritePosters.has(poster._id)} />
         ))}
         <div className="m-auto my-4">
           <ul className="flex flex-row gap-1">
@@ -70,7 +68,7 @@ const  ProductList = (props)=> {
                 className={`bg-white px-2 ring-1 ring-black ${currentPage === 1 ? 'bg-opacity-70' : ''}`}
                 href="#"
                 onClick={() => {
-                  pageData(`http://localhost:4000/posters/?pageNumber=${currentPage > 1 ? currentPage - 1 : currentPage}`, currentPage > 1 ? currentPage - 1 : currentPage);
+                  pageData(`${backendUrl}/posters/?pageNumber=${currentPage > 1 ? currentPage - 1 : currentPage}`, currentPage > 1 ? currentPage - 1 : currentPage);
                 }}
               >
                 Previous
@@ -82,7 +80,7 @@ const  ProductList = (props)=> {
                   className={`px-2 ring-1 ring-black ${num === currentPage ? 'bg-primary text-primary_text' : 'bg-white'}`}
                   href="#"
                   onClick={() => {
-                    pageData(`http://localhost:4000/posters/?pageNumber=${num}`, num);
+                    pageData(`${backendUrl}/posters/?pageNumber=${num}`, num);
                   }}
                 >
                   {num}
@@ -94,7 +92,7 @@ const  ProductList = (props)=> {
                 className="bg-white px-2 ring-1 ring-black"
                 href="#"
                 onClick={() => {
-                  pageData(`http://localhost:4000/posters/?pageNumber=${currentPage + 1}`, currentPage + 1);
+                  pageData(`${backendUrl}/posters/?pageNumber=${currentPage + 1}`, currentPage + 1);
                 }}
               >
                 Next

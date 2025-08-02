@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios'
 import {ShoppingBagIcon} from '@heroicons/react/24/outline'
 import NavBar from '../navBar/NavBar'
-import Footer from '../Footer/Footer'
+import Footer from '../footer/Footer'
+const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 const Product = (props) => {
  const {id} = useParams();
 
@@ -11,7 +12,7 @@ const Product = (props) => {
 
  useEffect(() => {
   axios
-    .get(`http://localhost:4000/posters/${id}`)
+    .get(`${backendUrl}/posters/${id}`)
     .then((response) => {
       setData(response.data);
      

@@ -5,13 +5,13 @@ import { HeartIcon } from '@heroicons/react/24/solid';
 import {useDispatch,useSelector} from 'react-redux'
 import {increment,decrement,setVal} from '../../app/cartSlice'
 import {addFavourite,removeFavourite, selectUser} from '../../app/userSlice'
+import axios from 'axios';
+const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 const Product= (props) => {
 
   const dispatch = useDispatch();
-  const user = useSelector(selectUser);
-  const favoritePosters= useSelector((state)=>state.user.favoritePosters)
-  
-  
+  const user = props.user|| null ;
+ 
   const onAddToCart = ()=>{
     const quantity=1;
     const item = {_id,quantity,imageUrl,title,price};
@@ -20,23 +20,41 @@ const Product= (props) => {
     
   }
 
-  
-  const [fav, setFav] = useState(false);
+  console.log('props.fav', props.fav)
+  const [fav, setFav] = useState(props.fav);
   const { imageUrl, price, title, _id } = props.poster;
 
+console.log('fav', fav)
+   useEffect(() => {
+  const updateFavourite = async () => {
+    if (!user) return;
 
- useEffect(()=>{
-  if(user){
-    if(fav==true)dispatch(addFavourite({id:_id}));
-    else dispatch(removeFavourite({id:_id}));
-   
-  }
- },[fav])
-  
+    try {
+      if (fav) {
+
+        await axios.post(
+          `${backendUrl}/user/favourites`,
+          { posterId: _id },
+          { withCredentials: true }
+        );
+         dispatch(addFavourite({id:_id}));
+      } else {
+        await axios.delete(`${backendUrl}/user/favourites/${_id}`, {
+          withCredentials: true,
+        });
+        dispatch(removeFavourite({id:_id}))
+      }
+    } catch (error) {
+      console.error('Error updating favourites:', error.message);
+    }
+  };
+
+  updateFavourite();
+}, [fav]);
 
   const toggleFav = () => {
-    setFav(!fav);
-    console.log('favoritePosters', favoritePosters);  
+    setFav(fav=>!fav);
+    // console.log('favoritePosters', favoritePosters);  
   };
 
   return (

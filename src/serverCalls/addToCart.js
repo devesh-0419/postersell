@@ -1,6 +1,8 @@
+import axios from "axios";
+const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 export const addToCart = async (userId, productId, quantity) => {
     try {
-      const response = await axios.post('/api/cart/addToCart', {
+      const response = await axios.post(`${backendUrl}/api/cart/addToCart`, {
         userId,
         productId,
         quantity
