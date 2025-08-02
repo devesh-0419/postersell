@@ -41,7 +41,7 @@ const NavBar = () => {
     // }
 
     axios
-      .get(`${backendUrl}/posters/search?val=${debounced}`)
+      .get(`${backendUrl}/posters/search?val=${debounced}`,{withCredentials: true})
       .then((response) => {
         setResult(response.data);
         console.log("Result: ", response.data);

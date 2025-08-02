@@ -12,7 +12,7 @@ const Product = (props) => {
 
  useEffect(() => {
   axios
-    .get(`${backendUrl}/posters/${id}`)
+    .get(`${backendUrl}/posters/${id}`,{withCredentials: true} )
     .then((response) => {
       setData(response.data);
      
