@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import  Home from './components/Home/Home';
-import  Product  from './components/Product/Product';
-import  Auth  from './components/Auth/Auth';
+import  Home from './components/home/Home';
+import  Product  from './components/product/Product';
+import  Auth  from './components/auth/Auth';
 import './App.css';
 import { BrowserRouter, Route, Routes,Navigate} from 'react-router-dom';
 import Profile from './components/profile/Profile';
