@@ -98,10 +98,12 @@ const handleChange = (e)=>{
   const handleEnter = (e) => {
   console.log('e.key', e.key)
 
-    if (e.key == "Enter" && (activeIndex!=-1||search.length>0)) {
+    if (e.key == "Enter" 
+      // && (activeIndex!=-1||search.length>0)
+    ) {
       navigate('/');
        const tempRes = [...result]; 
-       console.log('result', result)
+      //  console.log('result', result)
        setSearch((tempRes[activeIndex].title)||search);
        const setPosters = (products) => {
          dispatch(initialize(products));
@@ -112,18 +114,18 @@ const handleChange = (e)=>{
 
 
     }
-    console.log('activeIndex', activeIndex)
-    if (e.key == "ArrowDown" && activeIndex<result.length-1) {
-      setActiveIndex(prev=>prev+1);
+    // console.log('activeIndex', activeIndex)
+    // if (e.key == "ArrowDown" && activeIndex<result.length-1) {
+    //   setActiveIndex(prev=>prev+1);
       
       
       
-    }
-    if (e.key == "ArrowUp" && activeIndex > 0) {
-      setActiveIndex(prev=>prev-1);
+    // }
+    // if (e.key == "ArrowUp" && activeIndex > 0) {
+    //   setActiveIndex(prev=>prev-1);
       
       
-    }
+    // }
 
   };
 
