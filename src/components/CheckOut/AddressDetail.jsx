@@ -3,6 +3,7 @@ import AddressInput from './AddressInput';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAddressDetail, deleteAddressDetail, selectUser } from '../../app/userSlice';
+import { toast } from 'react-toastify';
 const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 const AddressDetail = () => {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const handleAddressDelete =  (i) => async (e) =>{
 
   } catch (error) {
     console.log('error', error);
+    toast.error('Failed to delete address');
   }
   
 };
@@ -59,6 +61,7 @@ const handleSubmit = async (e) => {
 
   } catch (error) {
     console.log('error', error);
+    toast.error(error.response?.data?.message || 'Failed to add address');
   }
   finally{
 const resetState = 

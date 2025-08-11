@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "../../app/userSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 
 const Register = ({ name }) => {
@@ -36,10 +37,11 @@ const Register = ({ name }) => {
       navigate('/');
       // setAuthStatus('User created and logged in!');
     } catch (error) {
-      console.error('Error creating user:', error);
+      // console.error('Error creating user:', error);
       setAuthStatus(
-        error.response?.data?.message || 'Failed to create user. Try again.'
+        error.response?.data?.message || 'Failed to Register. Try again.'
       );
+      toast.error(error.response?.data?.message || 'Failed to Register. Try again.');
     }
     finally{
       setDisplayName("");
@@ -66,8 +68,9 @@ console.log('e', e)
 
 
     } catch (error) {
-      console.error('Login error:', error.response?.data?.message);
-      setAuthStatus( error.response?.data?.message || 'Failed to LogIn. Try again.');
+      console.error('Login error:', error.message);
+      setAuthStatus( error.message || 'Failed to LogIn. Try again.');
+      toast.error('Failed to LogIn. Try again.');
     }
     finally{
        setEmail("");

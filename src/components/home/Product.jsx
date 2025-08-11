@@ -6,6 +6,7 @@ import {useDispatch,useSelector} from 'react-redux'
 import {increment,decrement,setVal} from '../../app/cartSlice'
 import {addFavourite,removeFavourite, selectUser} from '../../app/userSlice'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 const Product= (props) => {
 
@@ -20,40 +21,45 @@ const Product= (props) => {
     
   }
 
-  console.log('props.fav', props.fav)
-  const [fav, setFav] = useState(props.fav);
+  // console.log('props.fav', props.fav);
+  const isFav = props.fav || false;
   const { imageUrl, price, title, _id } = props.poster;
-
-console.log('fav', fav)
-   useEffect(() => {
+  const [fav, setFav] = useState(isFav);
+  // setFav(props.fav || false);
   const updateFavourite = async () => {
     if (!user) return;
-
+    
     try {
-      if (fav) {
-
+      // console.log('fav', fav);
+      if (!fav) {
         await axios.post(
           `${backendUrl}/user/favourites`,
           { posterId: _id },
           { withCredentials: true }
         );
          dispatch(addFavourite({id:_id}));
-      } else {
-        await axios.delete(`${backendUrl}/user/favourites/${_id}`, {
-          withCredentials: true,
-        });
-        dispatch(removeFavourite({id:_id}))
-      }
+        } else {
+          await axios.delete(`${backendUrl}/user/favourites/${_id}`, {
+            withCredentials: true,
+          });
+          // console.log('brfore slice');
+          dispatch(removeFavourite({id:_id}))
+          
+        }
+
+        setFav(fav=>!fav);
+
     } catch (error) {
-      console.error('Error updating favourites:', error.message);
+      toast.error(error.message || 'Error updating favourites');
+      // toggleFav();
+      // console.error('Error updating favourites:', error.message);
     }
   };
 
-  updateFavourite();
-}, [fav]);
 
   const toggleFav = () => {
-    setFav(fav=>!fav);
+    
+    updateFavourite();
     // console.log('favoritePosters', favoritePosters);  
   };
 

@@ -99,7 +99,9 @@ const handleChange = (e)=>{
   console.log('e.key', e.key)
 
     if (e.key == "Enter" 
-      // && (activeIndex!=-1||search.length>0)
+      && (
+      // activeIndex!=-1||
+      search.length>0)
     ) {
       navigate('/');
        const tempRes = [...result]; 
@@ -108,9 +110,7 @@ const handleChange = (e)=>{
        const setPosters = (products) => {
          dispatch(initialize(products));
        };
-
-
-   setPosters(result);
+         setPosters(result);
 
 
     }
@@ -243,7 +243,7 @@ const handleChange = (e)=>{
             </div>
           </div>
           <div className="flex flex-row gap-4 my-0.5  h-[4.5rem]">
-            <div className="hidden my-5 lg:block group hover:scale-105 ">
+            {/* <div className="hidden my-5 lg:block group hover:scale-105 ">
               <div className="lg:flex">
                 <h1 className="text-xl">Category</h1>
                 <ChevronUpIcon className="w-5 mx-1  group-hover:rotate-180 transition-transform duration-500" />
@@ -263,7 +263,7 @@ const handleChange = (e)=>{
                   })}
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="hidden xl:block my-5 mx-3 hover:scale-105 cursor-pointer">
               <h1 className="text-xl">Become a Seller</h1>
             </div>

@@ -28,6 +28,7 @@ const userSlice = createSlice({
     },
     removeFavourite:(state,action)=>{
       const {id} = action.payload;
+      console.log('action.payload', action.payload)
       state.credential.favoritePosters = state.credential.favoritePosters.filter(item => item !== id);
         
     },

@@ -1,16 +1,20 @@
 import { ChevronUpIcon } from '@heroicons/react/24/solid';
 import React from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
+import { setSortBy } from '../../app/productSlice';
 
 
 const FilterOptions = () => {
-  const navigate = useNavigate();
+  const dispatch=useDispatch();
+  // const navigate = useNavigate();
   const handleSortBy = (e)=>{
+   dispatch(setSortBy({sortBy:e.target.dataset.name}));
     // console.log('e', e.target.dataset.name);
-navigate(`?sortby=${e.target.dataset.name}`)
+// navigate(`?sortby=${e.target.dataset.name}`)
   }
 
-  const sortBy = [{title:"Name (a to z)",name:"name_asc"},{title:"Name (z to a)",name:"name_desc"},{title:"Price (low to high)",name:"price_asc"},{title:"Price (high to low)",name:"price_desc"}];
+  const sortBy = [{title:"Name (a to z)",name:"name_asc"},{title:"Name (z to a)",name:"name_desc"},{title:"Price (low to high)",name:"price_asc"},{title:"Price (high to low)",name:"price_desc"},{title:"Reset",name:""}];
 
   return (
    <>

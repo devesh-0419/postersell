@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 const backendUrl = import.meta.env.VITE_BACKEND_URI || "http://localhost:4000";
 const YourAddress = () => {
   const [addresses, setAddresses] = useState([]);
@@ -13,7 +14,10 @@ const YourAddress = () => {
         console.log("req.data", res.data);
         setAddresses(res.data)
       })
-      .catch(() => setError("Failed to fetch addresses"))
+      .catch((error) =>{ 
+        setError("Failed to fetch addresses")
+      toast.error("Failed to fetch addresses", error.message)
+      })
       .finally(() => setLoading(false));
   }, []);
 

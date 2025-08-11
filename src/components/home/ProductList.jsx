@@ -24,10 +24,10 @@ const  ProductList = (props)=> {
   const [pagenumber, setPageNumber] = useState([1, 2]);
  
 
-const {sortby} = useParams();
-console.log('sortBy', sortby);
-const url = sortby ? `${backendUrl}/posters/?sortby=${sortby}` : `${backendUrl}/posters/`;
+const sortBy = useSelector((state)=>state.product.sortBy);
 
+const url = sortBy ? `${backendUrl}/posters?sortby=${sortBy}` : `${backendUrl}/posters/`;
+console.log('url', url)
   useEffect(() => {
     // console.log("refresh..........");
     
@@ -39,7 +39,7 @@ const url = sortby ? `${backendUrl}/posters/?sortby=${sortby}` : `${backendUrl}/
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
-  }, [sortby]);
+  }, [sortBy]);
 
   const pageData = (address, page) => {
     axios
@@ -61,7 +61,7 @@ const url = sortby ? `${backendUrl}/posters/?sortby=${sortby}` : `${backendUrl}/
         {posters.map((poster, i) => (
           <Product poster={poster} key={i} user={user} fav={favoritePosters.has(poster._id)} />
         ))}
-        <div className="m-auto my-4">
+        {posters.length > 0 && <div className="m-auto my-4">
           <ul className="flex flex-row gap-1">
             <li>
               <a
@@ -99,8 +99,8 @@ const url = sortby ? `${backendUrl}/posters/?sortby=${sortby}` : `${backendUrl}/
               </a>
             </li>
           </ul>
+          </div>}
         </div>
-      </div>
     </div>
   );
 }

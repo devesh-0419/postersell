@@ -12,7 +12,8 @@ import axios from 'axios';
 import YourOrder from './components/profile/YourOrder';
 import YourFavourites from './components/profile/YourFavourites';
 import YourAddress from './components/profile/YourAddress';
-
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 const App = () =>{
   const user = useSelector(selectUser);
  
@@ -27,9 +28,14 @@ const App = () =>{
         <Route path="/your-favorites" element={user?<YourFavourites user={user} type={"favorites"} />:<Navigate to="/"/>} />
         <Route path="/your-address" element={user?<YourAddress user={user} type={"address"} />:<Navigate to="/"/>} />
         <Route path="/checkout" element={user?<CheckOut  />:<Navigate to="/login"/>} />
-        <Route path="/" element={<Home  />} />
+        <Route path="" element={<Home  />} />
       </Routes>
-     
+           <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        pauseOnHover
+        draggable
+      />
     </BrowserRouter>
   );
 }
