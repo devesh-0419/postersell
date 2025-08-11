@@ -1,5 +1,5 @@
 
-<!-- 
+
 
 <img src="public\Logo1.png" alt="Alt Text" width="60"/> 
 
@@ -91,13 +91,9 @@ yarn start
 - `npm run lint` — Runs eslint for code quality (if configured).
 
 
-## Contributing
-
-Contributions are welcome! Please submit a pull request or open an issue to discuss your suggestions.
 
 
-<div style="text-align: center">⁂</div>
- -->
+
 
 ## UI
 
@@ -124,4 +120,9 @@ Contributions are welcome! Please submit a pull request or open an issue to disc
 
 
 
+## Contributing
 
+Contributions are welcome! Please submit a pull request or open an issue to discuss your suggestions.
+
+
+<div style="text-align: center">⁂</div>
