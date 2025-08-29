@@ -145,7 +145,7 @@ const handleChange = (e)=>{
   const logOutHandler = async() => {
     console.log("user", user);
     dispatch(clearUser());
-    await axios.post('http://localhost:4000/logout', {}, { withCredentials: true });
+    await axios.post(`${backendUrl}/logout`, {}, { withCredentials: true });
 
   };
 
